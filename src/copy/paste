@@ -21,3 +21,210 @@ function Dropdown() {
 }
 
 export default Dropdown;
+
+
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    borderRadius: '18px',
+    backgroundColor: '#103955',
+    width: '250px',
+    fontSize: '18px'
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? '#103955' : '#103955',
+    color: state.isSelected ? '#FE8926' : '#FE8926',
+    fontSize: '18px'
+
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: '#FE8926',
+  }),
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    backgroundColor: '#FE8926',
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: '#FE8926',
+  }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    color: '#FE8926',
+
+  }),
+  menu: (provided) => ({
+    ...provided,
+    width: '280px',
+  }),
+};
+
+
+import React, { useState } from 'react';
+import Select from 'react-select';
+
+const options = [  { value: 'basketball', label: 'Basketball' },  { value: 'football', label: 'Football' },  { value: 'volleyball', label: 'Volleyball' },  { value: 'tennis', label: 'Tennis' },  { value: 'swimming', label: 'Swimming' },  { value: 'athletics', label: 'Athletics' },];
+
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    borderRadius: '18px',
+    backgroundColor: '#103955',
+    width: '250px',
+    fontSize: '18px'
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? '#103955' : '#103955',
+    color: state.isSelected ? '#FE8926' : '#FE8926',
+    fontSize: '18px'
+
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: '#FE8926',
+  }),
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    backgroundColor: '#FE8926',
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: '#FE8926',
+  }),
+  singleValue: (provided, state) => ({
+    ...provided,
+    color: '#FE8926',
+
+  }),
+  menu: (provided) => ({
+    ...provided,
+    width: '280px',
+  }),
+};
+
+const schedules = {
+  basketball: [
+    { team: 'Team A', time: '10:00 AM', location: 'Gym 1' },
+    { team: 'Team B', time: '12:00 PM', location: 'Gym 2' },
+  ],
+  football: [
+    { team: 'Team C', time: '1:00 PM', location: 'Field 1' },
+    { team: 'Team D', time: '3:00 PM', location: 'Field 2' },
+  ],
+  volleyball: [
+    { team: 'Team E', time: '11:00 AM', location: 'Court 1' },
+    { team: 'Team F', time: '2:00 PM', location: 'Court 2' },
+  ],
+  tennis: [
+    { team: 'Team G', time: '9:00 AM', location: 'Court 3' },
+    { team: 'Team H', time: '4:00 PM', location: 'Court 4' },
+  ],
+  swimming: [
+    { team: 'Team I', time: '8:00 AM', location: 'Pool 1' },
+    { team: 'Team J', time: '5:00 PM', location: 'Pool 2' },
+  ],
+  athletics: [
+    { team: 'Team K', time: '6:00 PM', location: 'Track 1' },
+    { team: 'Team L', time: '7:00 PM', location: 'Track 2' },
+  ],
+};
+
+function Schedule({ event }) {
+  const [schedule, setSchedule] = useState(schedules[event]);
+
+  return (
+    <div className="schedule-container">
+      <h2>{event} Schedule</h2>
+      {schedule.map((item) => (
+        <div key={item.team}>
+          <
+
+
+
+
+          export function EventsPage() {
+            const [selectedOption, setSelectedOption] = useState(null);
+            const filteredGames = selectedOption
+              ? games.filter((game) => game.homeTeam === selectedOption.label || game.awayTeam === selectedOption.label)
+              : games;
+          
+            function handleOptionChange(selectedOption) {
+              setSelectedOption(selectedOption);
+            }
+          
+            return (
+              <div className="header-container">
+                <div className="title-event">
+                  <h2>
+                    Today's Event 
+                    <div className="line">
+                      <img src={line2} alt="line" />
+                    </div>
+                  </h2>
+                  <Dropdown selectedOption={selectedOption} onOptionChange={handleOptionChange} />
+                  <div className="mens">
+                    <h2>
+                      Mens
+                    </h2>
+                  </div>
+                  <Schedule games={filteredGames} />
+                </div>
+              </div>
+            );
+          }
+
+          
+
+          export function EventsPage() {
+            const [selectedOption, setSelectedOption] = useState(null);
+            const filteredGames = selectedOption
+              ? games.filter((game) => game.homeTeam === selectedOption.label || game.awayTeam === selectedOption.label)
+              : games;
+          
+            function handleOptionChange(selectedOption) {
+              setSelectedOption(selectedOption);
+            }
+          
+            return (
+              <div className="header-container">
+                <div className="title-event">
+                  <h2>
+                    Today's Event 
+                    <div className="line">
+                      <img src={line2} alt="line" />
+                    </div>
+                  </h2>
+                  <Dropdown selectedOption={selectedOption} onOptionChange={handleOptionChange} />
+                  <div className="mens">
+                    <h2>
+                      Mens
+                    </h2>
+                  </div>
+                  <Schedule games={filteredGames} />
+                </div>
+              </div>
+            );
+          }
+          
+
+          export function Dropdown({ selectedOption, onOptionChange }) {
+            function handleOptionChange(selectedOption) {
+              onOptionChange(selectedOption);
+            }
+          
+            return (
+              <div className="dropdown-container">
+                <Select
+                  value={selectedOption}
+                  onChange={handleOptionChange}
+                  options={options}
+                  styles={customStyles}
+                  placeholder="Select Event"
+                />
+              </div>
+            );
+          }
+          

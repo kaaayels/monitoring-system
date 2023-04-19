@@ -12,25 +12,14 @@ export function EventsPage() {
     <div className="header-container">
     <div className="title-event">
       <h2>
-        Today's Event 
+        Today's Match 
         <div className="line">
         <img src={line2} alt="line" />
         </div>
       </h2>
       <Dropdown />
-      <div className="mens">
-      <h2>
-        Mens
-        </h2>
-        </div>
-      <Schedule/>
-      <div className="womens">
-      <h2>
-        Womens
-        </h2>
-        </div>
-        <Schedule2/>
-    </div>
+      <Schedule />
+      </div>
     </div>
   );
 }
@@ -75,7 +64,7 @@ const customStyles = {
   }),
   singleValue: (provided, state) => ({
     ...provided,
-    color: '#FE8926',
+    color: '#FE8926', 
 
   }),
   menu: (provided) => ({
@@ -114,9 +103,10 @@ function Schedule() {
         <tr>
           <th>Home Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
           <th>Away Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Location&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+          <th>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+          <th>Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+          <th>Location &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+          <th>Division &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -127,6 +117,7 @@ function Schedule() {
             <td>{game.date}</td>
             <td>{game.time}</td>
             <td>{game.location}</td>
+            <td>{game.division}</td>
           </tr>
         ))}
       </tbody>
@@ -143,6 +134,7 @@ const games = [
     date: 'mm/dd/yy',
     time: 'hh:mm',
     location: 'Bicol University',
+    division: 'Mens'
   },
   {
     id: 2,
@@ -151,23 +143,8 @@ const games = [
     date: 'mm/dd/yy',
     time: 'hh:mm',
     location: 'Bicol University',
-  },
-  {
-    id: 3,
-    homeTeam: 'Team 5',
-    awayTeam: 'Team 6',
-    date: 'mm/dd/yy',
-    time: 'hh:mm',
-    location: 'Bicol University',
-  },
-  {
-    id: 4,
-    homeTeam: 'Team 7',
-    awayTeam: 'Team 8',
-    date: 'mm/dd/yy',
-    time: 'hh:mm',
-    location: 'Bicol University',
-  },
+    division: 'Womens'
+  }, 
   // more games...
 ];
 
@@ -183,21 +160,22 @@ function GameForm() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
+  const [division, setDivision] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
     const id = games.length + 1;
-    const game = { id, homeTeam, awayTeam, date, time, location };
+    const game = { id, homeTeam, awayTeam, date, time, location, division };
     addGame(game);
     setHomeTeam('');
     setAwayTeam('');
     setDate('');
     setTime('');
     setLocation('');
+    setDivision('');
     toast.success('Game added successfully!', {
       position: toast.POSITION.TOP_RIGHT,
       
-
       closeOnClick: true, // Close the notification when clicked
       pauseOnHover: true, // Pause the timer when hovered
       draggable: true, // Allow to drag the notification
@@ -227,7 +205,7 @@ function GameForm() {
       </label>
       <br />
       <label>
-        Date: &nbsp;
+        Date: 
         <input
           type="date"
           value={date}
@@ -236,7 +214,7 @@ function GameForm() {
       </label>
       <br />
       <label>
-        Time: &nbsp;
+        Time: 
         <input
           type="time"
           value={time}
@@ -253,15 +231,50 @@ function GameForm() {
         />
       </label>
       <br />
+      <label>
+        Divison:
+        <input
+          type="text"
+          value={division}
+          onChange={(event) => setDivision(event.target.value)}
+        />
+      </label>
+      <br />
       <button className='addgame' type="submit">Add Game</button>
     </form>
     </div>
   );
-}
+} 
 export default GameForm
 
 
-/*        womens schedule       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*        womens schedule       
 
 
 function Schedule2() {
@@ -359,45 +372,45 @@ export function GameForm2() {
       <label>
         Home Team:
         <input
-          type="text"
-          value={homeTeam2}
-          onChange={(event) => setHomeTeam2(event.target.value)}
+          type2="text"
+          value2={homeTeam2}
+          onChange2={(event) => setHomeTeam2(event.target.value2)}
         />
       </label>
       <br />
       <label>
         Away Team:
         <input
-          type="text"
-          value={awayTeam2}
-          onChange={(event) => setAwayTeam2(event.target.value)}
+          type2="text"
+          value2={awayTeam2}
+          onChange2={(event) => setAwayTeam2(event.target.value2)}
         />
       </label>
       <br />
       <label>
         Date:
         <input
-          type="date"
-          value={date2}
-          onChange={(event) => setDate2(event.target.value)}
+          type2="date"
+          value2={date2}
+          onChange2={(event) => setDate2(event.target.value2)}
         />
       </label>
       <br />
       <label>
         Time:
         <input
-          type="time"
-          value={time2}
-          onChange={(event) => setTime2(event.target.value)}
+          type2="time"
+          value2={time2}
+          onChange2={(event) => setTime2(event.target.value2)}
         />
       </label>
       <br />
       <label>
         Location:
         <input
-          type="text"
-          value={location2}
-          onChange={(event) => setLocation2(event.target.value)}
+          type2="text"
+          value2={location2}
+          onChange2={(event) => setLocation2(event.target.valu2e)}
         />
       </label>
       <br />
@@ -407,3 +420,4 @@ export function GameForm2() {
 }
 
 
+*/

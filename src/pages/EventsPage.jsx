@@ -1,24 +1,31 @@
 import React from "react";
 import line2 from '../styles/icons/line2.png';
 import '../styles/pages/events-page.css'
-import { useState } from 'react';
-import Select from 'react-select'
+import { useState, useEffect } from 'react';
+import Select from 'react-select';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';;
+import 'react-toastify/dist/ReactToastify.css';
+import db from "./db.json";
 
 
 export function EventsPage() {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  function handleOptionChange(selectedOption) {
+    setSelectedOption(selectedOption);
+  }
+
   return (
     <div className="header-container">
-    <div className="title-event">
-      <h2>
-        Today's Match 
-        <div className="line">
-        <img src={line2} alt="line" />
-        </div>
-      </h2>
-      <Dropdown />
-      <Schedule />
+      <div className="title-event">
+        <h2>
+          Today's Match 
+          <div className="line">
+            <img src={line2} alt="line" />
+          </div>
+        </h2>
+        <Dropdown handleOptionChange={handleOptionChange} selectedOption={selectedOption} />
+        {selectedOption && <Schedule selectedOption={selectedOption} />}
       </div>
     </div>
   );
@@ -26,14 +33,7 @@ export function EventsPage() {
 
 
 
-const options = [
-  { value: 'Option 1', label: 'Basketball' },
-  { value: 'Option 2', label: 'Football' },
-  { value: 'Option 3', label: 'Volleyball' },
-  { value: 'Option 4', label: 'Tennis' },
-  { value: 'Option 5', label: 'Swimming' },
-  { value: 'Option 6', label: 'Athletics' },
-];
+
 
 const customStyles = {
   control: (provided) => ({
@@ -73,19 +73,21 @@ const customStyles = {
   }),
 };
 
-export function Dropdown() {
-  const [selectedOption, setSelectedOption] = useState(null);
 
-  function handleOptionChange(selectedOption) {
-    setSelectedOption(selectedOption);
-  }
+export function Dropdown({ handleOptionChange, selectedOption }) {
+  const sportsOptions = db.sports.map((sport) => ({
+    value: sport.id,
+    label: sport.name,
+  }));
 
   return (
     <div className="dropdown-container">
       <Select
         value={selectedOption}
-        onChange={handleOptionChange}
-        options={options}
+        onChange={(selectedOption) => {
+          handleOptionChange(selectedOption);
+        }}
+        options={sportsOptions}
         styles={customStyles}
         placeholder="Select Event"
       />
@@ -93,35 +95,129 @@ export function Dropdown() {
   );
 }
 
+export function Schedule() {
+  const [tableData, setTableData] = useState(db.sports.map(sport => ({
+    homeTeam: '',
+    awayTeam: '',
+    time: '',
+    location: '',
+    division: '',
+    winner: '',
+  })));
 
+  const handleTableChange = (event, rowIndex, key) => {
+    const newData = [...tableData];
+    newData[rowIndex][key] = event.target.value;
+    setTableData(newData);
+  };
 
-function Schedule() {
+  const handleAddRow = () => {
+    const newSport = db.sports[tableData.length];
+    const newRow = {
+      homeTeam: '',
+      awayTeam: '',
+      time: '',
+      location: '',
+      division: '',
+      winner: '',
+    };
+    setTableData([...tableData, newRow]);
+  };
+
   return (
-    <div className="container-box">
     <table>
       <thead>
         <tr>
-          <th>Home Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Away Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Location &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-          <th>Division &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</th>
+          <th>Home Team</th>
+          <th>Away Team</th>
+          <th>Time</th>
+          <th>Location</th>
+          <th>Division</th>
+          <th>Winner</th>
         </tr>
       </thead>
       <tbody>
-        {games.map((game) => (
-          <tr key={game.id}>
-            <td>{game.homeTeam}</td>
-            <td>{game.awayTeam}</td>
-            <td>{game.date}</td>
-            <td>{game.time}</td>
-            <td>{game.location}</td>
-            <td>{game.division}</td>
+        {tableData.map((rowData, rowIndex) => (
+          <tr key={rowIndex}>
+            <td><input value={rowData.homeTeam} onChange={(event) => handleTableChange(event, rowIndex, 'homeTeam')} /></td>
+            <td><input value={rowData.awayTeam} onChange={(event) => handleTableChange(event, rowIndex, 'awayTeam')} /></td>
+            <td><input value={rowData.time} onChange={(event) => handleTableChange(event, rowIndex, 'time')} /></td>
+            <td><input value={rowData.location} onChange={(event) => handleTableChange(event, rowIndex, 'location')} /></td>
+            <td><input value={rowData.division} onChange={(event) => handleTableChange(event, rowIndex, 'division')} /></td>
+            <td><input value={rowData.winner} onChange={(event) => handleTableChange(event, rowIndex, 'winner')} /></td>
           </tr>
         ))}
       </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan={6}><button onClick={handleAddRow}>Add Row</button></td>
+        </tr>
+      </tfoot>
     </table>
+  );
+}
+
+
+/*
+export function Dropdown({ handleOptionChange, selectedOption }) {
+  const options = [
+    { value: 'Basketball', label: 'Basketball' },
+    { value: 'Football', label: 'Football' },
+    { value: 'Volleyball', label: 'Volleyball' },
+    { value: 'Tennis', label: 'Tennis' },
+    { value: 'Swimming', label: 'Swimming' },
+    { value: 'Athletics', label: 'Athletics' },
+  ];
+
+  return (
+    <div className="dropdown-container">
+      <Select
+        value={selectedOption}
+        onChange={(selectedOption) => {
+          handleOptionChange(selectedOption);
+        }}
+        options={options}
+        styles={customStyles}
+        placeholder="Select Event"
+      />
+    </div>
+  );
+}
+*/
+
+
+
+
+/*
+function Schedule({ selectedOption }) {
+  const filteredGames = games.filter(game => game.event === selectedOption?.label);
+  
+  return (
+    <div className="container-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Home Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Away Team &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Location &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Division &nbsp; &nbsp; &nbsp; &nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredGames.map((game) => (
+            <tr key={game.id}>
+              <td>{game.homeTeam}</td>
+              <td>{game.awayTeam}</td>
+              <td>{game.date}</td>
+              <td>{game.time}</td>
+              <td>{game.location}</td>
+              <td>{game.division}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -161,11 +257,12 @@ function GameForm() {
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [division, setDivision] = useState('');
+  const [schedule, setSchedule] = useState('Regular Season'); // New state for selected schedule
 
   function handleSubmit(event) {
     event.preventDefault();
     const id = games.length + 1;
-    const game = { id, homeTeam, awayTeam, date, time, location, division };
+    const game = { id, homeTeam, awayTeam, date, time, location, division, schedule }; // Add schedule to the game object
     addGame(game);
     setHomeTeam('');
     setAwayTeam('');
@@ -173,80 +270,92 @@ function GameForm() {
     setTime('');
     setLocation('');
     setDivision('');
+    setSchedule('Select Event'); // Reset the schedule selection
     toast.success('Game added successfully!', {
       position: toast.POSITION.TOP_RIGHT,
-      
-      closeOnClick: true, // Close the notification when clicked
-      pauseOnHover: true, // Pause the timer when hovered
-      draggable: true, // Allow to drag the notification
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
     });
-
   }
 
   return (
     <div className='container-form'>
-    <form onSubmit={handleSubmit}>
-      <label>
-        Home Team:
-        <input
-          type="text"
-          value={homeTeam}
-          onChange={(event) => setHomeTeam(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Away Team:
-        <input
-          type="text"
-          value={awayTeam}
-          onChange={(event) => setAwayTeam(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Date: 
-        <input
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Time: 
-        <input
-          type="time"
-          value={time}
-          onChange={(event) => setTime(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Location:
-        <input
-          type="text"
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Divison:
-        <input
-          type="text"
-          value={division}
-          onChange={(event) => setDivision(event.target.value)}
-        />
-      </label>
-      <br />
-      <button className='addgame' type="submit">Add Game</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Home Team:
+          <input
+            type="text"
+            value={homeTeam}
+            onChange={(event) => setHomeTeam(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Away Team:
+          <input
+            type="text"
+            value={awayTeam}
+            onChange={(event) => setAwayTeam(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Date: &nbsp;
+          <input
+            type="date"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Time: &nbsp;
+          <input
+            type="time"
+            value={time}
+            onChange={(event) => setTime(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Location:
+          <input
+            type="text"
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Division:
+          <input
+            type="text"
+            value={division}
+            onChange={(event) => setDivision(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Schedule: &nbsp;
+          <select value={schedule} onChange={(event) => setSchedule(event.target.value)}>
+            <option value="Basketball">Basketball</option>
+            <option value="Football">Football</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Swimming">Swimming</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Athletics">Athletics</option>
+          </select>
+        </label>
+        <br />
+        <button className='addgame' type="submit">Add Game</button>
+      </form>
     </div>
   );
-} 
-export default GameForm
+}
 
+export default GameForm;
+*/
 
 
 

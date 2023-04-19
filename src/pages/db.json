@@ -1,0 +1,94 @@
+{
+    
+    "colleges":
+    [
+        {
+            "name": "College of Science",
+            "id": "001"
+        },
+
+        {
+            "name": "College of Nursing",
+            "id": "002"
+        },
+
+        {
+            "name": "College of Arts and Letters",
+            "id": "003"
+        },
+        
+        {
+            "name": "College of Social Sciences and Philosophy",
+            "id": "004"
+        },
+       
+        {
+            "name": "College of Architecture",
+            "id": "005"
+        },
+       
+        {
+            "name": "College of Business Economics and Management",
+            "id": "006"
+        },
+
+        {
+            "name": "College of Industrial Technology",
+            "id": "007"
+        },
+
+        {
+            "name": "Institute of Physical Education, Sports and Recreation",
+            "id": "008"
+        }
+    ],
+
+    "sports":
+    [
+        {"name": "Football", "id": "2001"},
+        {"name": "Basketball", "id": "2002"},
+        {"name": "Volleyball", "id": "2003"},
+        {"name": "Swimming", "id": "2004"},
+        {"name": "Athletics", "id": "2005"},
+        {"name": "Tennis", "id": "2006"},
+        {"name": "Badminton", "id": "2007"},
+        {"name": "Baseball", "id": "2008"},
+        {"name": "Table Tennis", "id": "2009"},
+        {"name": "Chess", "id": "2010"}
+    ],
+
+
+    "round_robin":
+    [
+        {
+            "games":
+            [
+                {
+                    "sports": "2001",
+                    "hometeam": "001",
+                    "awayteam": "002",
+                    "round": "1"
+                },
+                {
+                    "sports": "2001",
+                    "hometeam": "003",
+                    "awayteam": "004"
+                },
+                {
+                    "sports": "2001",
+                    "hometeam": "005",
+                    "awayteam": "CBEM"
+                },
+                {
+                    "sports": "2001",
+                    "hometeam": "006",
+                    "awayteam": "007"
+                }
+            ]
+        }
+    ]
+
+}
+
+
+   

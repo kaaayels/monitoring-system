@@ -13,7 +13,7 @@ function AdminPage() {
       <h2>
         Today's Event
       </h2>
-      <GameForm />
+
       <ToastContainer />
       </div>
 

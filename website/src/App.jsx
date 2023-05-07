@@ -5,11 +5,10 @@ import { EventsPage } from "./pages/EventsPage";
 import { LeaderboardsPage } from "./pages/LeaderboardsPage";
 import { StandingsPage } from "./pages/StandingsPage";
 import LoginPage from "./pages/LoginPage";
-import AdminPage from "./pages/AdminPage"
+import AdminPage from "./pages/AdminPage";
 import "./styles/styles.css";
 
 function App() {
-
   return (
     <div className="main">
       <Sidebar />

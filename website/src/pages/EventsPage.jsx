@@ -1,78 +1,84 @@
-import React from "react";
-import line2 from '../styles/icons/line2.png';
-import '../styles/pages/events-page.css'
-import { useState, useEffect } from 'react';
-import Select from 'react-select';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import "react-toastify/dist/ReactToastify.css";
+import line2 from "../styles/icons/line2.png";
+import "../styles/pages/events-page.css";
 import db from "./db.json";
-
+import instance from "../api/instance";
 
 export function EventsPage() {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [events, setEvents] = useState([]);
 
-  function handleOptionChange(selectedOption) {
+  const getEvents = async () => {
+    const result = await instance.get("/events");
+    setEvents(result.data);
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
+
+  const handleOptionChange = (selectedOption) => {
     setSelectedOption(selectedOption);
-  }
+  };
 
   return (
     <div className="header-container">
       <div className="title-event">
         <h2>
-          Today's Match 
+          Today's Match
           <div className="line">
             <img src={line2} alt="line" />
           </div>
         </h2>
-        <Dropdown handleOptionChange={handleOptionChange} selectedOption={selectedOption} />
-        {selectedOption && <Schedule selectedOption={selectedOption} />}
+        <Dropdown
+          handleOptionChange={handleOptionChange}
+          selectedOption={selectedOption}
+        />
+        {selectedOption && (
+          <Schedule selectedOption={selectedOption} events={events} />
+        )}
       </div>
     </div>
   );
 }
 
-
-
-
-
 const customStyles = {
   control: (provided) => ({
     ...provided,
-    borderRadius: '18px',
-    backgroundColor: '#103955',
-    width: '250px',
-    fontSize: '18px'
+    borderRadius: "18px",
+    backgroundColor: "#103955",
+    width: "250px",
+    fontSize: "18px",
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isSelected ? '#103955' : '#103955',
-    color: state.isSelected ? '#FE8926' : '#FE8926',
-    fontSize: '18px'
-
+    backgroundColor: state.isSelected ? "#103955" : "#103955",
+    color: state.isSelected ? "#FE8926" : "#FE8926",
+    fontSize: "18px",
   }),
   dropdownIndicator: (provided) => ({
     ...provided,
-    color: '#FE8926',
+    color: "#FE8926",
   }),
   indicatorSeparator: (provided) => ({
     ...provided,
-    backgroundColor: '#FE8926',
+    backgroundColor: "#FE8926",
   }),
   placeholder: (provided) => ({
     ...provided,
-    color: '#FE8926',
+    color: "#FE8926",
   }),
   singleValue: (provided, state) => ({
     ...provided,
-    color: '#FE8926', 
-
+    color: "#FE8926",
   }),
   menu: (provided) => ({
     ...provided,
-    width: '280px',
+    width: "280px",
   }),
 };
-
 
 export function Dropdown({ handleOptionChange, selectedOption }) {
   const sportsOptions = db.sports.map((sport) => ({
@@ -95,35 +101,7 @@ export function Dropdown({ handleOptionChange, selectedOption }) {
   );
 }
 
-export function Schedule() {
-  const [tableData, setTableData] = useState(db.sports.map(sport => ({
-    homeTeam: '',
-    awayTeam: '',
-    time: '',
-    location: '',
-    division: '',
-    winner: '',
-  })));
-
-  const handleTableChange = (event, rowIndex, key) => {
-    const newData = [...tableData];
-    newData[rowIndex][key] = event.target.value;
-    setTableData(newData);
-  };
-
-  const handleAddRow = () => {
-    const newSport = db.sports[tableData.length];
-    const newRow = {
-      homeTeam: '',
-      awayTeam: '',
-      time: '',
-      location: '',
-      division: '',
-      winner: '',
-    };
-    setTableData([...tableData, newRow]);
-  };
-
+export function Schedule({ selectedOption, events }) {
   return (
     <table>
       <thead>
@@ -137,26 +115,20 @@ export function Schedule() {
         </tr>
       </thead>
       <tbody>
-        {tableData.map((rowData, rowIndex) => (
-          <tr key={rowIndex}>
-            <td><input value={rowData.homeTeam} onChange={(event) => handleTableChange(event, rowIndex, 'homeTeam')} /></td>
-            <td><input value={rowData.awayTeam} onChange={(event) => handleTableChange(event, rowIndex, 'awayTeam')} /></td>
-            <td><input value={rowData.time} onChange={(event) => handleTableChange(event, rowIndex, 'time')} /></td>
-            <td><input value={rowData.location} onChange={(event) => handleTableChange(event, rowIndex, 'location')} /></td>
-            <td><input value={rowData.division} onChange={(event) => handleTableChange(event, rowIndex, 'division')} /></td>
-            <td><input value={rowData.winner} onChange={(event) => handleTableChange(event, rowIndex, 'winner')} /></td>
+        {events.map((event) => (
+          <tr key={event._id}>
+            <td>{event.homeTeam}</td>
+            <td>{event.awayTeam}</td>
+            <td>{event.homeTeam}</td>
+            <td>{event.location}</td>
+            <td>{event.division}</td>
+            <td>{event.winner}</td>
           </tr>
         ))}
       </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={6}><button onClick={handleAddRow}>Add Row</button></td>
-        </tr>
-      </tfoot>
     </table>
   );
 }
-
 
 /*
 export function Dropdown({ handleOptionChange, selectedOption }) {
@@ -184,9 +156,6 @@ export function Dropdown({ handleOptionChange, selectedOption }) {
   );
 }
 */
-
-
-
 
 /*
 function Schedule({ selectedOption }) {
@@ -356,32 +325,6 @@ function GameForm() {
 
 export default GameForm;
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*        womens schedule       
 

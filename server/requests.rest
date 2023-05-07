@@ -1,0 +1,18 @@
+GET http://localhost:3001/events HTTP/1.1
+
+###
+
+POST http://localhost:3001/events/new HTTP/1.1
+Content-Type: application/json
+
+{
+    "homeTeam": "543",
+    "awayTeam": "672",
+    "location": "CENG Gymnasium",
+    "division": "male",
+    "winner": "672"
+}
+
+###
+
+DELETE http://localhost:3001/events/delete/645280c8c89fae13f5e2b938 HTTP/1.1

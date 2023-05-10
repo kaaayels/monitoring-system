@@ -102,6 +102,7 @@ export function Dropdown({ handleOptionChange, selectedOption }) {
 }
 
 export function Schedule({ selectedOption, events }) {
+  console.log(selectedOption)
   return (
     <table>
       <thead>
@@ -115,7 +116,7 @@ export function Schedule({ selectedOption, events }) {
         </tr>
       </thead>
       <tbody>
-        {events.map((event) => (
+        {events.filter(event=>event.sport===selectedOption.value).map((event) => (
           <tr key={event._id}>
             <td>{event.homeTeam}</td>
             <td>{event.awayTeam}</td>

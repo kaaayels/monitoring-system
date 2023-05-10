@@ -1,7 +1,6 @@
 import React from 'react'
-import GameForm from './EventsPage'
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminEdit from './AdminEdit'
 
 function AdminPage() {
   return (
@@ -14,7 +13,7 @@ function AdminPage() {
         Today's Event
       </h2>
 
-      <ToastContainer />
+    <AdminEdit />
       </div>
 
 

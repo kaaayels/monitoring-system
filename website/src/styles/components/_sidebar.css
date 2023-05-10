@@ -86,7 +86,12 @@
 background-color: #fe8926;
   }
   
-
+  .login-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  
 .login {
     display: flex;
     list-style-type: none;
